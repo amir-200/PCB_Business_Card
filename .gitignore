@@ -1,0 +1,36 @@
+
+# --- KiCad Backup files ---
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+*.sch-bak
+_autosave-*
+*~
+
+# --- KiCad Local Workspace / User Preference files ---
+# Storing window positions, layer visibility, and local cache
+*.kicad_prl
+fp-info-cache
+
+# --- KiCad 9+ / Modern Project History ---
+.history/
+
+# --- Temporary / Log files ---
+*.000
+*.tmp
+*-save.pro
+*-save.kicad_pcb
+*.erc
+*.drc
+
+# --- Auto-routed & Netlist files (Usually safely ignored) ---
+*.net
+*.dsn
+*.ses
+
+# --- Manufacturing Output / Artifacts (Optional but Recommended) ---
+# Un-comment the line below if you generate Gerbers inside a 'gerber/' or 'plots/' directory
+# and want Git to ignore them.
+# gerber/
+# plots/
