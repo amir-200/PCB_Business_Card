@@ -14,6 +14,7 @@ PCB_Business_Card-backups/
 # Storing window positions, layer visibility, and local cache
 *.kicad_prl
 fp-info-cache
+.reference/
 
 # --- KiCad 9+ / Modern Project History ---
 .history/
