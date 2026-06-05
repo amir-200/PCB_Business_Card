@@ -7,6 +7,8 @@
 *.sch-bak
 _autosave-*
 *~
+*.lck
+PCB_Business_Card-backups/
 
 # --- KiCad Local Workspace / User Preference files ---
 # Storing window positions, layer visibility, and local cache

@@ -30,3 +30,10 @@
 [ ] USB circuitry  : Mihir
 
 [ ] battery charging : amir
+
+## Collaboration
+
+- Work on short feature branches for each hardware section, for example `feature/card-controller`.
+- Only one person should edit the KiCad schematic/PCB files at a time.
+- Push branches to GitHub and review changes before merging to `main`.
+- Do not commit KiCad lock files, local history, generated DRC/ERC reports, or temporary files.
