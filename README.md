@@ -31,6 +31,22 @@
 
 [ ] battery charging : amir
 
+[ ] Card Controller foundation: RP2350A power, USB data, flash, I2C bus, Motion Wake interrupt, TM1640 control pins, debug/programming support, and optional power-status sensing
+
+## Card Controller Interface Table
+
+| Subsystem | Candidate part | Interface | Controller signals | Current decision |
+| --- | --- | --- | --- | --- |
+| Program flash and content storage | Winbond W25Q128JVSIQ, 16 MB | Dedicated RP2350A QSPI | QSPI SCLK, SS, SD0-SD3 | Use one flash with a firmware area and MSC-exposed content partition |
+| LED matrix | TM1640 x2 | TM1640 two-wire control | Driver A CLK/DIO, Driver B CLK/DIO | 21 x 12 matrix split as top 6 rows and bottom 6 rows |
+| RTC | DS3231 candidate | I2C | SDA, SCL | Revisit later; DS3231 is preferred over DS1307 for 3V3 operation |
+| IMU | QMI8658 | I2C plus interrupt | SDA, SCL, IMU_INT | Use dedicated Motion Wake interrupt |
+| NFC tag | ST25TN01K | I2C if MCU configuration is needed | SDA, SCL, optional interrupt | Keep on shared I2C unless address or datasheet review says otherwise |
+| OLED provision | TBD OLED module | SPI preferred | SCLK, MOSI, CS, DC, RESET | Keep as provision/header; do not share this assumption with TM1640 control |
+| USB update | PCB edge USB-C | USB 2.0 plus VBUS sense | USB_DP, USB_DM, VBUS_SENSE | USB exposes MSC content partition and powers/charges card |
+| Debug and recovery | Pads plus tiny BOOTSEL button | SWD and boot/reset access | SWDIO, SWCLK, RUN pad, GND, 3V3, BOOTSEL button | Low-profile debug pads; one tiny BOOTSEL button |
+| Battery status | TBD divider/switch | ADC sense | BATTERY_SENSE | Include power-conscious battery voltage measurement |
+
 ## Collaboration
 
 - Work on short feature branches for each hardware section, for example `feature/card-controller`.

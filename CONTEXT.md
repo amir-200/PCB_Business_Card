@@ -32,6 +32,34 @@ _Avoid_: LEDs, display lights
 The coordinate and driver ownership map for the LED Matrix.
 _Avoid_: LED order, driver split
 
+**Debug Pads**:
+Low-profile physical pads that expose Card Controller bring-up and recovery signals without using a visible header.
+_Avoid_: debug header, programming connector
+
+**BOOTSEL Button**:
+A tiny physical button used to request USB boot mode during Card Controller reset or power-up.
+_Avoid_: reset button, dual-purpose button
+
+**Program Flash**:
+The external 16 MB QSPI flash that stores the Card Controller firmware and related program data.
+_Avoid_: storage flash, memory chip, content storage
+
+**Content Partition**:
+The user-editable region of Program Flash exposed over USB mass storage for display content updates.
+_Avoid_: files, MSC memory, flash storage
+
+**USB Update Mode**:
+The powered-by-USB mode where the Card Controller exposes the Content Partition as a mass storage device.
+_Avoid_: programming mode, USB mode
+
+**VBUS Sense**:
+A Card Controller input that detects whether USB power is present.
+_Avoid_: USB power wire, charger input
+
+**Battery Sense**:
+A power-conscious Card Controller measurement of battery voltage for brightness and runtime decisions.
+_Avoid_: raw battery pin, battery wire
+
 ## Relationships
 
 - The **Card Controller** coordinates the card's display, storage, sensing, timekeeping, NFC-related behavior, and expansion interfaces.
@@ -41,6 +69,12 @@ _Avoid_: LED order, driver split
 - **Motion Wake** is a dedicated IMU interrupt input to the **Card Controller**, separate from the I2C bus.
 - The **LED Matrix** is controlled by two TM1640 LED drivers and is used by both the **Idle Time Display** and **Shake Animation**.
 - The **Display Map** splits the **LED Matrix** into a top six rows controlled by one TM1640 and a bottom six rows controlled by the other TM1640.
+- **Debug Pads** expose SWD, reset or run control, power reference, and ground for Card Controller bring-up.
+- The **BOOTSEL Button** is separate from **Debug Pads** and does not replace reset or SWD recovery access.
+- **Program Flash** is connected to the Card Controller through the dedicated QSPI interface.
+- The **Content Partition** lives inside **Program Flash** and is exposed by the Card Controller over USB mass storage.
+- **USB Update Mode** is entered when USB is connected and uses **VBUS Sense** to distinguish USB-powered behavior from battery behavior.
+- **Battery Sense** helps the Card Controller limit LED brightness and Shake Animation behavior when battery voltage is low.
 
 ## Example dialogue
 
@@ -61,6 +95,24 @@ _Avoid_: LED order, driver split
 
 > **Dev:** "Can we split the 21 by 12 matrix into left and right driver halves?"
 > **Domain expert:** "No, use the **Display Map** because an 11-column half would exceed one TM1640's 128-LED capacity."
+
+> **Dev:** "Can we skip debug access because USB programming exists?"
+> **Domain expert:** "No, use **Debug Pads** so first-board bring-up has a recovery path."
+
+> **Dev:** "Can one button act as both reset and BOOTSEL?"
+> **Domain expert:** "No, use a tiny **BOOTSEL Button** and keep reset or run control on **Debug Pads**."
+
+> **Dev:** "Can any SPI flash hold the firmware?"
+> **Domain expert:** "No, use **Program Flash** that follows the RP2350A reference QSPI expectations."
+
+> **Dev:** "Does the USB mass storage device need a separate storage chip?"
+> **Domain expert:** "No, expose a **Content Partition** inside **Program Flash** for user-editable display content."
+
+> **Dev:** "Can firmware just assume USB is present when data lines enumerate?"
+> **Domain expert:** "No, add **VBUS Sense** so **USB Update Mode** and battery behavior can be separated cleanly."
+
+> **Dev:** "Can the controller read battery voltage directly?"
+> **Domain expert:** "No, use **Battery Sense** so voltage measurement is safe for the Card Controller and does not waste coin-cell current."
 
 ## Flagged ambiguities
 
