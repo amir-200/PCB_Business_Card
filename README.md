@@ -47,9 +47,18 @@
 | Debug and recovery | Pads plus tiny BOOTSEL button | SWD and boot/reset access | SWDIO, SWCLK, RUN pad, GND, 3V3, BOOTSEL button | Low-profile debug pads; one tiny BOOTSEL button |
 | Battery status | TBD divider/switch | ADC sense | BATTERY_SENSE | Include power-conscious battery voltage measurement |
 
+## Things to remember while laying out the pcb 
+
+- the internal regulator component placement and the inductor orientation has to be same as the rasbeery pi  official doc
+- AOTA-B201610S3R3-101-T this is the recommended inductor that the official docs recommend 
+-  
+
+
 ## Collaboration
 
 - Work on short feature branches for each hardware section, for example `feature/card-controller`.
 - Only one person should edit the KiCad schematic/PCB files at a time.
 - Push branches to GitHub and review changes before merging to `main`.
 - Do not commit KiCad lock files, local history, generated DRC/ERC reports, or temporary files.
+
+
